@@ -35,7 +35,9 @@ AutoPodTranscript 是一套自动化播客处理流水线工具。支持通过 R
 
 Bash
 git clone https://github.com/hgshot/AutoPodTranscript.git
+
 cd AutoPodTranscript
+
 pip install -r requirements.txt
 
 ### 2. 核心配置
