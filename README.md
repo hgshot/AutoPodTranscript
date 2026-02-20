@@ -48,18 +48,22 @@ Python
 
 1. 基础设置
 RSS_FEED_URL = "" # 播客 RSS 源地址
-LOCAL_SAVE_DIR = "./Podcast_Downloads"                # 本地音频保存路径
 
-2. 流水线开关 (True开启 / False关闭)
+LOCAL_SAVE_DIR = "./Podcast_Downloads" # 本地音频保存路径
+
+3. 流水线开关 (True开启 / False关闭)
 ENABLE_GDRIVE_SYNC = True       # 下载完成后，是否同步到 Google Drive
+
 ENABLE_LOCAL_TRANSCRIPT = False # 下载完成后，是否触发本地 AI 转录 (预留接口)
 
-3. Google Drive 配置 (开启同步时需填写)
+5. Google Drive 配置 (开启同步时需填写)
 DRIVE_FOLDER_ID = "请在这里填入你的_Folder_ID"
 
-4. 下载策略
+6. 下载策略
 CHECK_LIMIT = 10     # 每次扫描最新 N 集 (填 0 表示全量扫描)
+
 MAX_WORKERS = 4      # 并发下载线程数
+
 PROXY_URL = "http://127.0.0.1:7890" # 代理地址 (直连请留空 "")
 
 ## 🚀 运行说明
