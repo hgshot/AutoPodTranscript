@@ -48,22 +48,22 @@ Python
 === 用户配置区 ===
 
 1. 基础设置
-2. 
-RSS_FEED_URL = "" # 播客 RSS 源地址
 
-LOCAL_SAVE_DIR = "./Podcast_Downloads" # 本地音频保存路径
+RSS_FEED_URL = "https://feed.xyzfm.space/y9qnpfdrctnx" # 播客 RSS 源地址
 
-3. 流水线开关 (True开启 / False关闭)
+LOCAL_SAVE_DIR = "./Podcast_Downloads"                # 本地音频保存路径
+
+2. 流水线开关 (True开启 / False关闭)
 
 ENABLE_GDRIVE_SYNC = True       # 下载完成后，是否同步到 Google Drive
 
 ENABLE_LOCAL_TRANSCRIPT = False # 下载完成后，是否触发本地 AI 转录 (预留接口)
 
-5. Google Drive 配置 (开启同步时需填写)
+3. Google Drive 配置 (开启同步时需填写)
 
 DRIVE_FOLDER_ID = "请在这里填入你的_Folder_ID"
 
-6. 下载策略
+4. 下载策略
 
 CHECK_LIMIT = 10     # 每次扫描最新 N 集 (填 0 表示全量扫描)
 
