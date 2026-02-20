@@ -1,0 +1,14 @@
+client_secrets.json
+token.json
+venv/
+env/
+.env
+__pycache__/
+*.pyc
+*.pyo
+Podcast_Downloads/
+*.mp3
+*.wav
+*.m4a
+.DS_Store
+Thumbs.db
