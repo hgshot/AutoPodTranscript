@@ -36,6 +36,7 @@ Bash
 git clone https://github.com/hgshot/AutoPodTranscript.git
 cd AutoPodTranscript
 pip install -r requirements.txt
+
 2. 核心配置
 编辑核心代码文件（如 autopod.py），在顶部的 === 用户配置区 === 根据需求调整参数：
 
