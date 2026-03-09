@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoPodTranscript — 播客逐字稿转换器</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-deep: #0d0f12;
+      --bg-card: #15181d;
+      --bg-elevated: #1c2026;
+      --accent: #e8a84a;
+      --accent-dim: #c48d3a;
+      --text: #e4e6ea;
+      --text-muted: #8b919a;
+      --border: #2a2f37;
+      --success: #5cb87a;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Noto Sans SC", -apple-system, sans-serif;
+      background: var(--bg-deep);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* 背景装饰：声波感 */
+    .noise {
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .gradient-orb {
+      position: fixed;
+      width: 60vw;
+      height: 60vw;
+      max-width: 500px;
+      max-height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,168,74,0.12) 0%, transparent 70%);
+      top: -20%;
+      right: -15%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .gradient-orb-2 {
+      width: 40vw;
+      height: 40vw;
+      max-width: 320px;
+      max-height: 320px;
+      background: radial-gradient(circle, rgba(92,184,122,0.08) 0%, transparent 70%);
+      bottom: -10%;
+      left: -10%;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    /* 头部 */
+    header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .tagline {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 0.5rem;
+    }
+
+    /* 简介卡片 */
+    .intro-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .intro-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* 特性网格 */
+    .section-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .features {
+      display: grid;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .feature:hover {
+      border-color: var(--accent-dim);
+      background: var(--bg-elevated);
+    }
+
+    .feature-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .feature h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    .feature p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* 快速开始 */
+    .quick-start {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .quick-start pre {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.8rem;
+      color: var(--accent);
+      background: var(--bg-deep);
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      overflow-x: auto;
+      border: 1px solid var(--border);
+    }
+
+    .quick-start pre span {
+      color: var(--text-muted);
+    }
+
+    /* 脚注 */
+    footer {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    footer p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="gradient-orb" aria-hidden="true"></div>
+  <div class="gradient-orb gradient-orb-2" aria-hidden="true"></div>
+
+  <div class="container">
+    <header>
+      <div class="logo">
+        <div class="logo-icon">🎙️</div>
+      </div>
+      <h1>AutoPodTranscript</h1>
+      <p class="tagline">播客逐字稿转换器 · 本地归档 · 云端同步 · AI 转录</p>
+    </header>
+
+    <section class="intro-card">
+      <p>
+        AutoPodTranscript 是一套自动化播客处理流水线。通过 RSS 源批量下载播客音频到本地，可选同步至 Google Drive，并接入本地或云端 AI 生成逐字稿，作为「听觉笔记系统」的前置引擎。
+      </p>
+    </section>
+
+    <h2 class="section-title">核心特性</h2>
+    <div class="features">
+      <article class="feature">
+        <div class="feature-icon">💾</div>
+        <div>
+          <h3>本地优先归档</h3>
+          <p>音频持久化保存，目录清晰，支持本地播放器与 NAS 归档。</p>
+        </div>
+      </article>
+      <article class="feature">
+        <div class="feature-icon">🧩</div>
+        <div>
+          <h3>模块化流水线</h3>
+          <p>下载、云端同步、AI 转录解耦，可仅下载或全流程自动化。</p>
+        </div>
+      </article>
+      <article class="feature">
+        <div class="feature-icon">⚡️</div>
+        <div>
+          <h3>极速并发</h3>
+          <p>多线程并发下载，智能增量更新，跳过已存在文件。</p>
+        </div>
+      </article>
+      <article class="feature">
+        <div class="feature-icon">🔗</div>
+        <div>
+          <h3>代理兼容</h3>
+          <p>针对国内网络优化，支持配置代理连通海外源与 Google 服务。</p>
+        </div>
+      </article>
+    </div>
+
+    <h2 class="section-title">快速开始</h2>
+    <section class="quick-start">
+      <pre><span># 安装依赖</span>
+pip install -r requirements.txt
+
+<span># 编辑 autopod.py 顶部配置（RSS 地址、保存路径、GDrive 等）后运行</span>
+python autopod.py</pre>
+    </section>
+
+    <footer>
+      <p>详细说明见 <a href="README.md">README.md</a> · 使用云端同步时请勿将 client_secrets.json / token.json 提交至公开仓库</p>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+# Google API 凭证 (极其重要，绝对不能公开)
+client_secrets.json
+token.json
+
+# 虚拟环境目录
+venv/
+env/
+.env
+
+# Python 缓存文件
+__pycache__/
+*.pyc
+*.pyo
+
+# 忽略本地下载的音频文件 (避免把几个G的音频传到代码仓库)
+Podcast_Downloads/
+*.mp3
+*.wav
+*.m4a
+
+# Mac/Windows 系统垃圾文件
+.DS_Store
+Thumbs.db
